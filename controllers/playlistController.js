@@ -20,4 +20,15 @@ async function getPlaylistInfo(req, res) {
       .json({ error: true, message: "Can't retrieve this playlist" })
   }
 }
-module.exports = { fetchPlaylist, getPlaylistInfo }
+
+async function createPlaylist(req, res) {
+  try {
+    const data = req.body
+    const insert = await playlistModel.create(data)
+    if (insert) res.status(201).json(data)
+  } catch (error) {
+    // console.log(error.stack)
+    res.status(403).json({ error: true, message: "Can't create playlist" })
+  }
+}
+module.exports = { fetchPlaylist, getPlaylistInfo, createPlaylist }

@@ -14,8 +14,8 @@ CREATE TABLE comments(
     id SERIAL PRIMARY KEY,
     playlistid INT,
     message STRING NOT NULL,
-    name STRING NOT NULL,
     type STRING NOT NULL,
+    name STRING NOT NULL
     CONSTRAINT fk_playlistid
         FOREIGN KEY(playlistid)
              REFERENCES playlist(id)

@@ -9,5 +9,6 @@ app.use(express.json())
 app.use(cors(corsConfig))
 
 app.use('/playlists', require('./routes/playlistRoutes'))
+app.use('/comments', require('./routes/commentsRoutes'))
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

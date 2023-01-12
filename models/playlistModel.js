@@ -3,9 +3,34 @@ const ErrorHandler = require('../helpers/errorHandler')
 const fetchDetails = require('isomorphic-unfetch')
 const { getPreview } = require('spotify-url-info')(fetchDetails)
 
-async function fetch() {
+async function fetch(pageNumber, offset, recordsPerPage) {
   try {
-    const data = await client.select().from('playlist').orderBy('id', 'desc')
+    const data = await client
+      .select()
+      .from('playlist')
+      .orderBy('id', 'desc')
+      .offset(offset)
+      .limit(recordsPerPage)
+    const total_records = await client('playlist').count('* as total')
+    const totalPages = Math.ceil(total_records[0].total / recordsPerPage)
+    return {
+      playlist: data,
+      pagination: {
+        page: pageNumber,
+        per_page: recordsPerPage,
+        total_pages: totalPages,
+        total_records: total_records,
+      },
+    }
+  } catch (error) {
+    console.log(error)
+    throw new ErrorHandler(error.message | "Can't Fetch playlist!", 403)
+  }
+}
+
+async function findOne(id) {
+  try {
+    const data = await client.select().from('playlist').where({ id: id })
     return data
   } catch (error) {
     throw new ErrorHandler(error.message | "Can't Fetch playlist!", 403)
@@ -26,8 +51,9 @@ async function create(playlist) {
     const data = client.insert(playlist).into('playlist').returning('*')
     return data
   } catch (error) {
+    console.log(error)
     throw new ErrorHandler(error.stack | "Can't create playlist", 403)
   }
 }
 
-module.exports = { fetch, getInfo, create }
+module.exports = { fetch, findOne, getInfo, create }

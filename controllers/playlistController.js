@@ -3,13 +3,15 @@ const playlistModel = require('../models/playlistModel')
 async function fetchPlaylist(req, res) {
   try {
     const pageNumber = req.query.page || 1
-    const recordsPerPage = req.query.per_page || 10
+    const recordsPerPage = req.query.per_page || 9
     const offset = (pageNumber - 1) * recordsPerPage
+    const searchQuery = req.query.search || ''
 
     const playlists = await playlistModel.fetch(
       pageNumber,
       offset,
-      recordsPerPage
+      recordsPerPage,
+      searchQuery
     )
     if (playlists) res.status(200).json(playlists)
   } catch (error) {

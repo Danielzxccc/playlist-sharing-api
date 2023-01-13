@@ -3,11 +3,12 @@ const ErrorHandler = require('../helpers/errorHandler')
 const fetchDetails = require('isomorphic-unfetch')
 const { getPreview } = require('spotify-url-info')(fetchDetails)
 
-async function fetch(pageNumber, offset, recordsPerPage) {
+async function fetch(pageNumber, offset, recordsPerPage, search) {
   try {
-    const data = await client
-      .select()
-      .from('playlist')
+    const data = await client('playlist')
+      .where('title', 'ilike', `${search}%`)
+      .orWhere('sentby', 'ilike', `${search}%`)
+      .orWhere('description', 'ilike', `${search}%`)
       .orderBy('id', 'desc')
       .offset(offset)
       .limit(recordsPerPage)
@@ -19,7 +20,7 @@ async function fetch(pageNumber, offset, recordsPerPage) {
         page: pageNumber,
         per_page: recordsPerPage,
         total_pages: totalPages,
-        total_records: total_records,
+        total_records: data.length,
       },
     }
   } catch (error) {

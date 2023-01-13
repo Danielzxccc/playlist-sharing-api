@@ -19,6 +19,7 @@ async function create(comment) {
     const data = await client.insert(comment).into('comments').returning('*')
     return data
   } catch (error) {
+    console.log(error)
     throw new ErrorHandler(error.message | "Can't Create This Comment!", 403)
   }
 }

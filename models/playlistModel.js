@@ -49,12 +49,23 @@ async function getInfo(link) {
 
 async function create(playlist) {
   try {
-    const data = client.insert(playlist).into('playlist').returning('*')
+    const data = await client.insert(playlist).into('playlist').returning('*')
     return data
   } catch (error) {
-    console.log(error)
     throw new ErrorHandler(error.stack | "Can't create playlist", 403)
   }
 }
 
-module.exports = { fetch, findOne, getInfo, create }
+async function fetchTop(type) {
+  try {
+    const data = await client('playlist')
+      .where(type, '>', '1')
+      .limit(5)
+      .orderBy(type, 'desc')
+    return data
+  } catch (error) {
+    throw new ErrorHandler(error.stack | "Can't fetch most loved", 403)
+  }
+}
+
+module.exports = { fetch, findOne, getInfo, create, fetchTop }

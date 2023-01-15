@@ -40,7 +40,7 @@ async function getPlaylistInfo(req, res) {
   } catch (error) {
     res
       .status(403)
-      .json({ error: true, message: "Can't retrieve this playlist" })
+      .json({ error: error, message: "Can't retrieve this playlist" })
   }
 }
 
@@ -50,10 +50,17 @@ async function createPlaylist(req, res) {
     const insert = await playlistModel.create(data)
     if (insert) res.status(201).json(insert)
   } catch (error) {
-    console.log(error.stack)
-    res
-      .status(403)
-      .json({ error: error.stack, message: "Can't create playlist" })
+    res.status(403).json({ error: error, message: "Can't create playlist" })
+  }
+}
+
+async function fetchTopPlaylist(req, res) {
+  try {
+    const { type } = req.body
+    const data = await playlistModel.fetchTop(type)
+    if (data) res.status(200).json(data)
+  } catch (error) {
+    res.status(403).json({ error: error, message: "Can't fetch top playlist" })
   }
 }
 module.exports = {
@@ -61,4 +68,5 @@ module.exports = {
   fetchPlaylistDetails,
   getPlaylistInfo,
   createPlaylist,
+  fetchTopPlaylist,
 }

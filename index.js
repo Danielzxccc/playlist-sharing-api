@@ -8,6 +8,9 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors(corsConfig))
 
+app.get('/', (req, res) => {
+  res.send('Welcome to Playlist Sharing API')
+})
 app.use('/playlists', require('./routes/playlistRoutes'))
 app.use('/comments', require('./routes/commentsRoutes'))
 

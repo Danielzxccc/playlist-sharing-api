@@ -10,7 +10,7 @@ async function fetch(id) {
       .orderBy('id', 'desc')
     return data
   } catch (error) {
-    throw new ErrorHandler(error.message | "Can't Fetch Comments!", 403)
+    throw new ErrorHandler(error.message || "Can't Fetch Comments!", 400)
   }
 }
 
@@ -20,7 +20,7 @@ async function create(comment) {
     return data
   } catch (error) {
     console.log(error)
-    throw new ErrorHandler(error.message | "Can't Create This Comment!", 403)
+    throw new ErrorHandler(error.message || "Can't Create This Comment!", 400)
   }
 }
 
@@ -31,7 +31,7 @@ async function checkCommentType(id, type) {
       .increment(type === 'loved' ? 'likes' : 'dislike', 1)
     return 'Added Comment Successfully'
   } catch (error) {
-    throw new ErrorHandler(error.message | "Can't Check Comment Type!", 403)
+    throw new ErrorHandler(error.message || "Can't Check Comment Type!", 400)
   }
 }
 

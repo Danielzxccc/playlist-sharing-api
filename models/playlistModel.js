@@ -25,7 +25,7 @@ async function fetch(pageNumber, offset, recordsPerPage, search) {
     }
   } catch (error) {
     console.log(error)
-    throw new ErrorHandler(error.message | "Can't Fetch playlist!", 403)
+    throw new ErrorHandler(error.message || "Can't Fetch playlist!", 400)
   }
 }
 
@@ -34,7 +34,7 @@ async function findOne(id) {
     const data = await client.select().from('playlist').where({ id: id })
     return data
   } catch (error) {
-    throw new ErrorHandler(error.message | "Can't Fetch playlist!", 403)
+    throw new ErrorHandler(error.message || "Can't Fetch playlist!", 400)
   }
 }
 
@@ -43,7 +43,7 @@ async function getInfo(link) {
     const data = await getPreview(link)
     return data
   } catch (error) {
-    throw new ErrorHandler(error.message | "Can't retrieve this playlist", 403)
+    throw new ErrorHandler(error.message || "Can't retrieve this playlist", 400)
   }
 }
 
@@ -52,7 +52,7 @@ async function create(playlist) {
     const data = await client.insert(playlist).into('playlist').returning('*')
     return data
   } catch (error) {
-    throw new ErrorHandler(error.stack | "Can't create playlist", 403)
+    throw new ErrorHandler(error.message || "Can't create playlist", 409)
   }
 }
 
@@ -64,7 +64,7 @@ async function fetchTop(type) {
       .orderBy(type, 'desc')
     return data
   } catch (error) {
-    throw new ErrorHandler(error.stack | "Can't fetch most loved", 403)
+    throw new ErrorHandler(error.message || "Can't fetch top playlists", 400)
   }
 }
 

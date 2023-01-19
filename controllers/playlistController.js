@@ -15,7 +15,7 @@ async function fetchPlaylist(req, res) {
     )
     if (playlists) res.status(200).json(playlists)
   } catch (error) {
-    res.status(403).json({ error: true, message: "Can't retrieve playlists" })
+    res.status(error.httpCode).json({ error: true, message: error.message })
   }
 }
 
@@ -26,9 +26,7 @@ async function fetchPlaylistDetails(req, res) {
     if (!playlist.length) res.status(404).json({ message: 'Not Found' })
     res.status(200).json(playlist)
   } catch (error) {
-    res
-      .status(403)
-      .json({ error: true, message: "Can't retrieve playlist " + error.stack })
+    res.status(error.httpCode).json({ error: true, message: error.message })
   }
 }
 
@@ -39,8 +37,8 @@ async function getPlaylistInfo(req, res) {
     if (data) res.status(200).json(data)
   } catch (error) {
     res
-      .status(403)
-      .json({ error: error, message: "Can't retrieve this playlist" })
+      .status(error.httpCode)
+      .json({ error: error.message, message: error.message })
   }
 }
 
@@ -50,7 +48,9 @@ async function createPlaylist(req, res) {
     const insert = await playlistModel.create(data)
     if (insert) res.status(201).json(insert)
   } catch (error) {
-    res.status(403).json({ error: error, message: "Can't create playlist" })
+    res
+      .status(error.httpCode)
+      .json({ error: error.message, message: error.message })
   }
 }
 
@@ -60,7 +60,7 @@ async function fetchTopPlaylist(req, res) {
     const data = await playlistModel.fetchTop(type)
     if (data) res.status(200).json(data)
   } catch (error) {
-    res.status(403).json({ error: error, message: "Can't fetch top playlist" })
+    res.status(403).json({ error: error, message: error.message })
   }
 }
 module.exports = {

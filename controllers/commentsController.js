@@ -6,7 +6,7 @@ async function fetchComments(req, res) {
     const comments = await commentsModel.fetch(id)
     if (comments) res.status(200).json(comments)
   } catch (error) {
-    res.status(403).json({ error: true, message: error })
+    res.status(error.httpCode).json({ error: true, message: error.message })
   }
 }
 
@@ -18,9 +18,9 @@ async function createComment(req, res) {
 
     const { type } = insert[0]
     const checkComment = await commentsModel.checkCommentType(id, type)
-    if (checkComment) res.status(200).json({ message: checkComment })
+    if (checkComment) res.status(201).json({ message: checkComment })
   } catch (error) {
-    res.status(403).json({ error: true, message: error })
+    res.status(error.httpCode).json({ error: true, message: error.message })
   }
 }
 

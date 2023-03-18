@@ -3,7 +3,7 @@ I made this REST API for my playlist sharing application using Nodejs, Expressjs
 
 # GET
 # Fetch playlists
-http://localhost:3500/playlists/get?page=1&search=
+/playlists/get?page=1&search=
 get playlists based on query params
 
 Query Params
@@ -12,12 +12,12 @@ page
 search
 # GET
 # Fetch by id
-http://localhost:3500/playlists/get/830851778115895297
+/playlists/get/:id
 get playlist details based on ID
 
 # POST
 # Fetch playlist info(url, image, embed)
-http://localhost:3500/playlists/info
+/playlists/info
 Bodyraw (json)
 {
   "link": "playlist link here"
